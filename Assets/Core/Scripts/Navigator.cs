@@ -121,7 +121,7 @@ namespace TilemapGridNavigation
             int distanceX = GridNode.GetDistanceX(from, to);
             int distanceY = GridNode.GetDistanceY(from, to);
             int remaining = Mathf.Abs(distanceX - distanceY);
-            return DIAGONAL_MOVE_COST * Mathf.Min(distanceX, distanceY) + DIAGONAL_MOVE_COST * remaining;
+            return (DIAGONAL_MOVE_COST * Mathf.Min(distanceX, distanceY)) + (STRAIGHT_MOVEMENT_COST * remaining);
         }
     }
 }

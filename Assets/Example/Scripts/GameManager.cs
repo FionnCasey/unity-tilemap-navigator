@@ -55,7 +55,7 @@ namespace TilemapGridNavigation.Example
 
             GridNode node = grid.GetNodeFromMousePos();
 
-            if (!node.CanMoveThrough(controllers[index].Entity)) return;
+            if (node == null || !node.CanMoveThrough(controllers[index].Entity)) return;
 
             PathData pathData = navigator.GetPath(controllers[index].CurrentNode, node, controllers[index].Entity);
             highlighter.HighlightNodes(pathData.path, "Path");
