@@ -2224,7 +2224,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1217490672
 Transform:
   m_ObjectHideFlags: 0
@@ -4518,4 +4518,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   highlightMap: {fileID: 811763257}
   highlightTile: {fileID: 11400000, guid: 76bf8dabd2968c7489472e497600106c, type: 2}
-  palette: {fileID: 11400000, guid: 20c755eed510caa4688620f78b377dc6, type: 2}
+  palette: {fileID: 11400000, guid: 5f82300778f052246b23d9225bcde03e, type: 2}

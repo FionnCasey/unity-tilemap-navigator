@@ -15,6 +15,7 @@ namespace TilemapGridNavigation.Example
 
         private NavGrid grid;
         private Navigator navigator;
+        private Sightfinder sightfinder;
         private Highlighter highlighter;
         private Transform unitContainer;
         private List<MovementController> controllers = new();
@@ -22,8 +23,9 @@ namespace TilemapGridNavigation.Example
 
         private void Start()
         {
-            grid = new(navMap);
+            grid = new(navMap, false);
             navigator = new Navigator4(grid);
+            sightfinder = new(grid);
             highlighter = FindObjectOfType<Highlighter>();
             unitContainer = GameObject.Find("UnitContainer").transform;
         }
@@ -38,6 +40,10 @@ namespace TilemapGridNavigation.Example
             {
                 SpawnUnit();
             }
+            else if (Input.GetKeyDown(KeyCode.Space))
+            {
+                ShowVisibleNodes();
+            }
             else if (Input.GetKeyDown(KeyCode.Tab))
             {
                 ToggleNavigator();
@@ -46,6 +52,19 @@ namespace TilemapGridNavigation.Example
             {
                 HandleKeyInput();
             }
+        }
+
+        private void ShowVisibleNodes()
+        {
+            if (index == -1 || index >= controllers.Count) return;
+            if (controllers[index].IsMoving) return;
+
+            SightInput input = new(controllers[index].CurrentNode, SightType.Standard, 1, 10, controllers[index].GetComponent<GridUnit>());
+            SightData sightData = sightfinder.GetVisibleNodes(input);
+
+            highlighter.ClearHighlights();
+            highlighter.HighlightNodes(sightData.nodesInRange, "NotVisible");
+            highlighter.HighlightNodes(sightData.visibleNodes, "Visible");
         }
 
         private async void MoveCurrentUnit()
@@ -58,6 +77,7 @@ namespace TilemapGridNavigation.Example
             if (node == null || !node.CanMoveThrough(controllers[index].Entity)) return;
 
             PathData pathData = navigator.GetPath(controllers[index].CurrentNode, node, controllers[index].Entity);
+            highlighter.ClearHighlights();
             highlighter.HighlightNodes(pathData.path, "Path");
 
             await controllers[index].Move(pathData.path);

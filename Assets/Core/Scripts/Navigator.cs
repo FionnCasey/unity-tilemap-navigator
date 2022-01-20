@@ -96,7 +96,7 @@ namespace TilemapGridNavigation
 
             }
             // No path found, return empty.
-            return new(path);
+            return new(path, false);
         }
 
         /// <summary>

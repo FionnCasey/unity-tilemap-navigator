@@ -15,3 +15,7 @@ MonoBehaviour:
   presets:
   - name: Path
     colour: {r: 0.12758099, g: 0.5754717, b: 0.28548583, a: 0.9019608}
+  - name: Visible
+    colour: {r: 0.8962264, g: 0.50053036, b: 0.13105197, a: 0.9019608}
+  - name: NotVisible
+    colour: {r: 0.8980392, g: 0.74393845, b: 0.59899217, a: 0.9019608}
