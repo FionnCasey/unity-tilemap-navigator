@@ -3,8 +3,8 @@ This project aims to provide A* pathfinding and line of sight detection for Unit
 
 ## Examples
 
-#### Navigation - 4 Directions
-<iframe width="640" height="348" src="https://www.loom.com/embed/8b85b7b0b3584211a035737a1a4136f6" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+#### Navigtion - 4 Directions
+![Navigtaion - 4 Directions](https://cdn.loom.com/sessions/thumbnails/8b85b7b0b3584211a035737a1a4136f6-with-play.gif)
 
-#### Navigation - 8 Directions
-<iframe width="640" height="349" src="https://www.loom.com/embed/8a0938ebcfc2487d88d89a7c73a69095" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+#### Navigtion - 8 Directions
+![Navigtaion - 8 Directions](https://cdn.loom.com/sessions/thumbnails/8a0938ebcfc2487d88d89a7c73a69095-with-play.gif)
