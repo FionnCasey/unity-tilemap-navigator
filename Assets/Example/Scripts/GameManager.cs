@@ -90,7 +90,7 @@ namespace TilemapGridNavigation.Example
             if (index == -1 || index >= controllers.Count) return;
             if (controllers[index].IsMoving) return;
 
-            SightInput input = new(controllers[index].CurrentNode, SightType.Standard, 1, 10, controllers[index].GetComponent<GridUnit>());
+            SightInput input = new(controllers[index].CurrentNode, SightType.Diagnonal, 1, 10, controllers[index].GetComponent<GridUnit>());
             SightData sightData = sightfinder.GetVisibleNodes(input);
 
             highlighter.ClearHighlights();

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -60,13 +61,25 @@ namespace TilemapGridNavigation
         /// <param name="input"></param>
         public SightData GetVisibleNodes(SightInput input)
         {
-            List<GridNode> nodesInRange = grid.Nodes.Where(node =>
-            {
-                if (!node.CanSeeThrough()) return false;
+            List<GridNode> nodesInRange;
 
-                int distance = GridNode.GetDistance(node, input.center);
-                return distance >= input.minRange && distance <= input.maxRange;
-            }).ToList();
+            switch (input.sightType)
+            {
+                case SightType.Standard:
+                    nodesInRange = GetNodesInRange(input);
+                    break;
+
+                case SightType.Linear:
+                    nodesInRange = GetLinearNodesInRange(input);
+                    break;
+
+                case SightType.Diagnonal:
+                    nodesInRange = GetDiagonalNodesInRange(input);
+                    break;
+
+                default:
+                    throw new Exception($"Invalid sight type provided: {input.sightType}");
+            }
 
             if (!input.requiresLOS)
             {
@@ -93,6 +106,43 @@ namespace TilemapGridNavigation
             }).ToList();
 
             return new(nodesInRange, visibleNodes);
+        }
+
+        private List<GridNode> GetNodesInRange(SightInput input)
+        {
+            return grid.Nodes.Where(node =>
+            {
+                if (!node.CanSeeThrough()) return false;
+
+                int distance = GridNode.GetDistance(node, input.center);
+                return distance >= input.minRange && distance <= input.maxRange;
+            }).ToList();
+        }
+
+        private List<GridNode> GetLinearNodesInRange(SightInput input)
+        {
+            return grid.Nodes.Where(node =>
+            {
+                if (!node.CanSeeThrough()) return false;
+                // Linear check.
+                if (node.GridPos.x != input.center.GridPos.x && node.GridPos.y != input.center.GridPos.y) return false;
+
+                int distance = GridNode.GetDistance(node, input.center);
+                return distance >= input.minRange && distance <= input.maxRange;
+            }).ToList();
+        }
+
+        private List<GridNode> GetDiagonalNodesInRange(SightInput input)
+        {
+            return grid.Nodes.Where(node =>
+            {
+                if (!node.CanSeeThrough()) return false;
+                // Diagonal check.
+                if (GridNode.GetDistanceX(input.center, node) != GridNode.GetDistanceY(input.center, node)) return false;
+
+                int distance = GridNode.GetDistance(node, input.center);
+                return distance >= input.minRange && distance <= input.maxRange;
+            }).ToList();
         }
     }
 }
