@@ -48,8 +48,10 @@ namespace TilemapGridNavigation
 
             while (path.Count > 0)
             {
-                if (currentNode.InterruptsMovement(Entity))
+                if (currentNode != CurrentNode && currentNode.InterruptsMovement(Entity))
                 {
+                    IsMoving = false;
+                    SetGridNode(currentNode);
                     return new(currentNode, distance, true);
                 }
 
@@ -65,9 +67,9 @@ namespace TilemapGridNavigation
                 }
                 currentNode = nextNode;
             }
+
             IsMoving = false;
             SetGridNode(currentNode);
-
             return new(currentNode, distance);
         }
 

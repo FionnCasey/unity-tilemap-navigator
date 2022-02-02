@@ -15,8 +15,8 @@ namespace TilemapGridNavigation
         /// Returns a list of all nodes surrounding a given node.
         /// </summary>
         /// <param name="center">The center node.</param>
-        /// <param name="entity">The entity on the grid.</param>
-        protected abstract List<GridNode> GetAdjacentNodes(GridNode center, IGridEntity entity);
+        /// <param name="entity">(Optional) The entity on the grid.</param>
+        protected abstract List<GridNode> GetAdjacentNodes(GridNode center, IGridEntity entity = null);
 
         /// <summary>
         /// Creates a new instance using the given NavGrid.
@@ -28,12 +28,28 @@ namespace TilemapGridNavigation
         }
 
         /// <summary>
-        /// 
+        /// Returns a list of all nodes within a certain distance of a given node.
         /// </summary>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
-        /// <param name="entity"></param>
-        public PathData GetPath(GridNode start, GridNode end, IGridEntity entity = null)
+        /// <param name="center">The center node.</param>
+        /// <param name="distance">The maximum distance in nodes.</param>
+        /// <param name="entity">(Optional) The entity on the grid.</param>
+        public List<GridNode> GetReachableNodes(GridNode center, int distance, IGridEntity entity = null)
+        {
+            return grid.Nodes.Where(node =>
+            {
+                return node.CanMoveThrough(entity) 
+                    && GridNode.GetDistance(center, node) <= distance
+                    && GetPath(center, node, entity).Count <= distance;
+            }).ToList();
+        }
+
+        /// <summary>
+        /// Returns a stack of nodes representing the shortest path betweeen 2 nodes.
+        /// </summary>
+        /// <param name="start">The start node.</param>
+        /// <param name="end">The end node.</param>
+        /// <param name="entity">(Optional) The grid entity traversing the grid.</param>
+        public Stack<GridNode> GetPath(GridNode start, GridNode end, IGridEntity entity = null)
         {
             grid.ResetPathfinding();
 
@@ -61,7 +77,7 @@ namespace TilemapGridNavigation
                         path.Push(current);
                         current = current.Parent;
                     }
-                    return new(path);
+                    return path;
                 }
 
                 adjacentNodes = GetAdjacentNodes(current, entity);
@@ -95,8 +111,8 @@ namespace TilemapGridNavigation
                 closedList.Add(current);
 
             }
-            // No path found, return empty.
-            return new(path, false);
+            // No path found, return empty stack.
+            return path;
         }
 
         /// <summary>

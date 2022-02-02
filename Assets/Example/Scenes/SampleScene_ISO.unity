@@ -1816,6 +1816,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   navMap: {fileID: 1217490674}
   unitPrefab: {fileID: 3000966637826165412, guid: f7f19d33b3d6b0d4e989dd020cec4fc1, type: 3}
+  interruptorPrefab: {fileID: 4410771316836328427, guid: 3fb06e8830dc91741b6378b9682f7032, type: 3}
 --- !u!4 &704936625
 Transform:
   m_ObjectHideFlags: 0

@@ -12,6 +12,8 @@ namespace TilemapGridNavigation.Example
         private Tilemap navMap;
         [SerializeField]
         private GridUnit unitPrefab;
+        [SerializeField]
+        private Interrupter interrupterPrefab;
 
         private NavGrid grid;
         private Navigator navigator;
@@ -35,10 +37,14 @@ namespace TilemapGridNavigation.Example
             if (Input.GetMouseButtonDown(0))
             {
                 MoveCurrentUnit();
-            } 
+            }
             else if (Input.GetMouseButtonDown(1))
             {
                 SpawnUnit();
+            }
+            else if (Input.GetKeyDown(KeyCode.Return))
+            {
+                ShowReachableNodes();
             }
             else if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -48,10 +54,35 @@ namespace TilemapGridNavigation.Example
             {
                 ToggleNavigator();
             }
+            else if (Input.GetKeyDown(KeyCode.I))
+            {
+                SpawnInterrupter();
+            }
             else
             {
                 HandleKeyInput();
             }
+        }
+
+        private void ShowReachableNodes()
+        {
+            if (index == -1 || index >= controllers.Count) return;
+            if (controllers[index].IsMoving) return;
+
+            List<GridNode> nodes = navigator.GetReachableNodes(controllers[index].CurrentNode, 6, controllers[index].GetComponent<GridUnit>());
+
+            highlighter.ClearHighlights();
+            highlighter.HighlightNodes(nodes, "Path");
+        }
+
+        private void SpawnInterrupter()
+        {
+            GridNode node = grid.GetNodeFromMousePos();
+
+            if (node == null || !node.CanMoveThrough()) return;
+
+            Interrupter interrupter = Instantiate(interrupterPrefab, node.WorldPos, Quaternion.identity);
+            node.AddContent(interrupter);
         }
 
         private void ShowVisibleNodes()
@@ -76,11 +107,11 @@ namespace TilemapGridNavigation.Example
 
             if (node == null || !node.CanMoveThrough(controllers[index].Entity)) return;
 
-            PathData pathData = navigator.GetPath(controllers[index].CurrentNode, node, controllers[index].Entity);
+            Stack<GridNode> path = navigator.GetPath(controllers[index].CurrentNode, node, controllers[index].Entity);
             highlighter.ClearHighlights();
-            highlighter.HighlightNodes(pathData.path, "Path");
+            highlighter.HighlightNodes(path, "Path");
 
-            await controllers[index].Move(pathData.path);
+            await controllers[index].Move(path);
 
             highlighter.ClearHighlights();
         }
